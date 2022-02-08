@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="sbt: org.openjfx:javafx-media:11:win:jar">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib_managed/jars/org.openjfx/javafx-media/javafx-media-11-win.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

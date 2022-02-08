@@ -1,0 +1,19 @@
+Fields marked with $ are required
+
+0.1
+   $matchNumber: StringProperty,
+   $teamNumber: StringProperty,
+   $scoutName: StringProperty,
+    scoredCargo1: IntegerProperty,
+    scoredCargo2: IntegerProperty,
+    scoredCargo3: IntegerProperty,
+    scoredPanels1: IntegerProperty,
+    scoredPanels2: IntegerProperty,
+    scoredPanels3: IntegerProperty,
+    climbLevel: IntegerProperty,
+    sandstormBonusLevel: IntegerProperty,
+    sandstormHatchPlace: IntegerProperty,
+    sandstormPickup: IntegerProperty,
+    defendedDrops: IntegerProperty,
+    comments: StringProperty
+
