@@ -14,7 +14,7 @@ object Components {
 		"#DC143C"
 
 	val rocketBlue: String =
-		"#6d9bdb"
+		"#6d9bff"
 
 	val backgroundGrey: Color =
 		Color.web("#303030")

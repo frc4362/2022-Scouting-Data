@@ -3,7 +3,7 @@
     <output-path>$PROJECT_DIR$/out/artifacts/scoutingapp2019</output-path>
     <root id="root">
       <element id="archive" name="scoutingapp2019.jar">
-        <element id="module-output" name="scoutingapp2019" />
+        <element id="module-output" name="scoutingapp2022" />
       </element>
     </root>
   </artifact>

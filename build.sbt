@@ -1,11 +1,11 @@
-name := "scoutingapp2019"
+name := "scoutingapp2022"
 
 version := "0.1.0"
 
 scalaVersion := "2.12.8"
 scalaSource in Compile := baseDirectory.value / "src" / "main" / "scala"
 
-val startingClass = Some("com.gemsrobotics.scouting2019.DataScoutingApp")
+val startingClass = Some("com.gemsrobotics.scouting2022.DataScoutingApp")
 
 exportJars := true
 retrieveManaged := true

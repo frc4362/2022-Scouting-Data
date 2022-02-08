@@ -8,8 +8,8 @@ import scalafx.scene.text.{Font, FontWeight, TextAlignment}
 
 protected class MyButton(text: String) extends Button(text) {
 	prefWidth = 100
-	prefHeight = 50
-	font = Font("Consolas", FontWeight.Normal, 30)
+	prefHeight = 10
+	font = Font("Consolas", FontWeight.Bold, 20)
 }
 
 class Incrementable(

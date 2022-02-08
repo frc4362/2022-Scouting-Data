@@ -6,7 +6,7 @@ import scalafx.geometry.{Insets, Pos}
 import scalafx.scene.Scene
 import scalafx.scene.control.Alert.AlertType
 import scalafx.scene.control._
-import scalafx.scene.layout.{Background, BackgroundFill, GridPane, VBox}
+import scalafx.scene.layout.{Background, BackgroundFill, GridPane, HBox, VBox}
 
 object DataScoutingApp extends JFXApp {
 	def userConfirm(question: String): Boolean = {
@@ -45,7 +45,9 @@ object DataScoutingApp extends JFXApp {
 		Seq(new Incrementable("Low Scored"),
 			new Incrementable("High Scored"),
 			new Incrementable("Low Missed"),
-			new Incrementable("High Missed"))
+			new Incrementable("High Missed")
+		)
+
 	val teleopIncrementables: Seq[Incrementable] =
 		Seq(new Incrementable("Low Scored"),
 			new Incrementable("High Scored"),
@@ -53,10 +55,10 @@ object DataScoutingApp extends JFXApp {
 			new Incrementable("High Missed"))
 
 	autonIncrementables.flatMap(_.btns).foreach { btn =>
-		btn.style.value = btn.style.value + s"-fx-background-color: ${Components.sandstormYellow};"
+		btn.style.value = btn.style.value + s"-fx-background-color: ${Components.resetRed};"
 	}
 	teleopIncrementables.flatMap(_.btns).foreach { btn =>
-		btn.style.value = btn.style.value + s"-fx-background-color: ${Components.affirmativeGreen};"
+		btn.style.value = btn.style.value + s"-fx-background-color: ${Components.rocketBlue};"
 	}
 
 	val taxiLevelSlider: Slider = new Slider {
@@ -143,41 +145,82 @@ object DataScoutingApp extends JFXApp {
 		)
 	}
 
+	val topBox = new HBox {
+		spacing = 10
+		children = Seq(
+			eventKeyLabel,
+			teamNumberLabel,
+			teamNumberTextField,
+			matchNumberLabel,
+			matchNumberTextField,
+			nameLabel,
+			nameTextField
+		)
+	}
+
+	val taxiBox = new HBox {
+		spacing = 10
+		children = Seq(
+			taxiLevelLabel,
+			taxiLevelSlider,
+			climbLevelLabel,
+			climbLevelSlider
+		)
+	}
+
+	val autonFields = new VBox {
+		spacing = 5
+		children = Seq(
+			new Label("Auton Scoring"),
+			autonIncrementables(0),
+			autonIncrementables(1),
+			autonIncrementables(2),
+			autonIncrementables(3)
+		)
+	}
+
+	val teleopFields = new VBox {
+		spacing = 5
+		children = Seq(
+			new Label("Teleop Scoring"),
+			teleopIncrementables(0),
+			teleopIncrementables(1),
+			teleopIncrementables(2),
+			teleopIncrementables(3),
+		)
+	}
+
+	val scoringFields = new HBox {
+		spacing = 5
+		children = Seq(
+			autonFields,
+			teleopFields
+		)
+	}
+
 	DataRecord.ensureOutputExists()
 	stage = new JFXApp.PrimaryStage {
 		title.value = "Rapid React Scouting App"
-		minHeight = 630
-		minWidth = 970
-		maxHeight = 630
-		maxWidth = 970
-		height = 630
-		width = 970
+		minHeight = 700
+		minWidth = 1300
+		maxHeight = 700
+		maxWidth = 1300
+		height = 700
+		width = 1300
 		resizable = false
 		scene = new Scene {
 			stylesheets.add("stylesheet.css")
 			content = new GridPane {
-				prefWidth = 970
-				prefHeight = 630
-				alignment = Pos.BaselineLeft
+				prefWidth = 1300
+				prefHeight = 700
+				alignment = Pos.Center
 				hgap = 10
 				padding = Insets(10, 10, 10, 10)
 				background = new Background(Array(new BackgroundFill(Components.backgroundGrey, null, null)))
-				add(eventKeyLabel, 0, 0)
-				add(teamNumberLabel, 1, 0)
-				add(teamNumberTextField, 2, 0, 2, 1)
-				add(matchNumberLabel, 4, 0, 1, 1)
-				add(matchNumberTextField, 5, 0, 2, 1)
-				add(nameLabel, 7, 0, 1, 1)
-				add(nameTextField, 8, 0, 2, 1)
-				add(saveButtons, 9, 0, 2, 1)
-				add(taxiLevelLabel, 0, 1)
-				add(taxiLevelSlider, 1, 1)
-				add(climbLevelLabel, 2, 1)
-				add(climbLevelSlider, 3, 1)
-				add(new Label("Auton Scoring"), 0, 2, 4, 1)
-				(0 to 3).foreach(n => add(autonIncrementables(n), n * 2, 3, 4, 2))
-				add(new Label("Teleop Scoring"), 4, 2, 4, 1)
-				(0 to 3).foreach(n => add(teleopIncrementables(n), n * 2, 7, 4, 2))
+				add(topBox, 0, 0)
+				add(taxiBox, 0, 1)
+				add(scoringFields, 0, 3)
+				add(saveButtons, 1, 3)
 			}
 		}
 	}
