@@ -16,11 +16,9 @@ object Components {
 	val rocketBlue: String =
 		"#6d9bff"
 
+	val coolPink: String =
+		"#ff2dc0"
+
 	val backgroundGrey: Color =
 		Color.web("#303030")
-
-	def textField(field: String): TextField =
-		new TextField {
-			text = field
-		}
 }

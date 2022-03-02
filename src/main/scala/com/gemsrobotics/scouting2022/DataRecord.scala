@@ -13,13 +13,13 @@ import scala.collection.mutable.MutableList
 
 object DataRecord {
 	val SCHEMA_VERSION: String =
-		"0.1"
+		"0.2"
 
 	val EVENT_KEY: String =
 		"2022gems"
 
 	private val HEADER: String =
-		""""Schema Version","Event Key","Team #","Match #","Scout","Taxi","Auton Scored Low","Auton Scored High","Auton Missed Low","Auton Missed High","Teleop Scored Low","Teleop Scored High","Teleop Missed Low","Teleop Missed High","Hang Level""""
+		""""Schema Version","Event Key","Team #","Match #","Scout","Taxi","Auton Scored Low","Auton Scored High","Auton Missed Low","Auton Missed High","Teleop Scored Low","Teleop Scored High","Teleop Missed Low","Teleop Missed High","Hang Level","Cool Points""""
 
 	private val OUTPUT_PATH: Path =
 		Paths.get(System.getProperty("user.dir") + "\\gemscoutput.csv")
@@ -56,6 +56,7 @@ class DataRecord(
 		teleopMissedLow: IntegerProperty,
 		teleopMissedHigh: IntegerProperty,
     climbLevel: IntegerProperty,
+    coolPoints: IntegerProperty
 ) {
 	import DataRecord._
 
@@ -77,6 +78,7 @@ class DataRecord(
 		teleopMissedLow.value = 0
 		teleopMissedHigh.value = 0
 		climbLevel.value = 0
+		coolPoints.value = 0
 	}
 
 	def isValid: Boolean =
@@ -121,7 +123,8 @@ class DataRecord(
 				teleopScoredHigh.get,
 				teleopMissedLow.get,
 				teleopMissedHigh.get,
-				climbLevel.get
+				climbLevel.get,
+				coolPoints.get
 			)
 
 			writer.writeRow(fields)

@@ -15,25 +15,18 @@ object DataScoutingApp extends JFXApp {
 				title = "?"
 			}.showAndWait()
 
-		response match {
-			case Some(ButtonType.Cancel) =>
-				false
-			case Some(ButtonType.OK) =>
-				true
-			case Some(_) =>
-				false
-			case None =>
-				false
-		}
+		response.contains(ButtonType.OK)
 	}
 
 	val eventKeyLabel: Label = new Label("Event Key: " + DataRecord.EVENT_KEY)
+	eventKeyLabel.style = "-fx-font-weight: bold"
 	val teamNumberLabel: Label = new Label("Team #")
 	val teamNumberTextField: TextField = new TextField
 	val matchNumberLabel: Label = new Label("Match #")
 	val matchNumberTextField: TextField = new TextField
-	val nameLabel: Label = new Label("Name")
+	val nameLabel: Label = new Label("    Name")
 	val nameTextField: TextField = new TextField
+	val emptyLabel: Label = new Label("")
 
 	val taxiLevelProperty: IntegerProperty =
 		IntegerProperty(0)
@@ -45,8 +38,7 @@ object DataScoutingApp extends JFXApp {
 		Seq(new Incrementable("Low Scored"),
 			new Incrementable("High Scored"),
 			new Incrementable("Low Missed"),
-			new Incrementable("High Missed")
-		)
+			new Incrementable("High Missed"))
 
 	val teleopIncrementables: Seq[Incrementable] =
 		Seq(new Incrementable("Low Scored"),
@@ -59,6 +51,11 @@ object DataScoutingApp extends JFXApp {
 	}
 	teleopIncrementables.flatMap(_.btns).foreach { btn =>
 		btn.style.value = btn.style.value + s"-fx-background-color: ${Components.rocketBlue};"
+	}
+
+	val coolIncrementable = new Incrementable("Cool Points")
+	coolIncrementable.btns.foreach { btn =>
+		btn.style.value = btn.style.value + s"-fx-background-color: ${Components.coolPink};"
 	}
 
 	val taxiLevelSlider: Slider = new Slider {
@@ -97,15 +94,15 @@ object DataScoutingApp extends JFXApp {
 
 	val resetButton: Button =
 		new Button("Reset") {
-			prefWidth = 240
-			prefHeight = 100
+			prefWidth = 300
+			prefHeight = 120
 			style = style.value + s"-fx-background-color: ${Components.resetRed}; -fx-font-size: 24px;"
 		}
 
 	val saveButton: Button =
 		new Button("Save") {
-			prefWidth = 240
-			prefHeight = 100
+			prefWidth = 300
+			prefHeight = 120
 			style = style.value + s"-fx-background-color: ${Components.affirmativeGreen}; -fx-font-size: 24px;"
 		}
 
@@ -122,8 +119,8 @@ object DataScoutingApp extends JFXApp {
 		teleopIncrementables(1).count,
 		teleopIncrementables(2).count,
 		teleopIncrementables(3).count,
-		climbLevelProperty
-	)
+		climbLevelProperty,
+		coolIncrementable.count)
 
 	resetButton.onMouseClicked = { _ =>
 		if (userConfirm("Are you sure you want to reset?\nTHIS IS IRREVERSIBLE")) {
@@ -137,94 +134,106 @@ object DataScoutingApp extends JFXApp {
 		}
 	}
 
-	val saveButtons = new VBox {
-		spacing = 10
-		children = Seq(
-			resetButton,
-			saveButton
-		)
-	}
-
 	val topBox = new HBox {
 		spacing = 10
 		children = Seq(
 			eventKeyLabel,
-			teamNumberLabel,
-			teamNumberTextField,
-			matchNumberLabel,
-			matchNumberTextField,
 			nameLabel,
-			nameTextField
-		)
+			nameTextField)
 	}
 
 	val taxiBox = new HBox {
 		spacing = 10
 		children = Seq(
+			teamNumberLabel,
+			teamNumberTextField,
+			matchNumberLabel,
+			matchNumberTextField,
 			taxiLevelLabel,
-			taxiLevelSlider,
-			climbLevelLabel,
-			climbLevelSlider
-		)
+			taxiLevelSlider)
 	}
+
+	val climbBox = new HBox {
+		spacing = 10
+		children = Seq(
+			climbLevelLabel,
+			climbLevelSlider)
+	}
+
+
+	val autonTextBox = new Label("Auton Scoring")
+	autonTextBox.style = "-fx-font-weight: bold"
 
 	val autonFields = new VBox {
 		spacing = 5
 		children = Seq(
-			new Label("Auton Scoring"),
-			autonIncrementables(0),
+			autonTextBox,
 			autonIncrementables(1),
-			autonIncrementables(2),
-			autonIncrementables(3)
-		)
+			autonIncrementables(0),
+			autonIncrementables(3),
+			autonIncrementables(2))
 	}
+
+	val teleopTextBox = new Label("Teleop Scoring")
+	teleopTextBox.style = "-fx-font-weight: bold"
 
 	val teleopFields = new VBox {
 		spacing = 5
 		children = Seq(
-			new Label("Teleop Scoring"),
-			teleopIncrementables(0),
+			teleopTextBox,
 			teleopIncrementables(1),
-			teleopIncrementables(2),
+			teleopIncrementables(0),
 			teleopIncrementables(3),
-		)
+			teleopIncrementables(2))
+	}
+
+	val saveButtons = new VBox {
+		spacing = 10
+		children = Seq(
+			emptyLabel,
+			coolIncrementable,
+			climbBox,
+			resetButton,
+			saveButton)
 	}
 
 	val scoringFields = new HBox {
-		spacing = 5
+		spacing = 10
 		children = Seq(
 			autonFields,
-			teleopFields
-		)
+			teleopFields,
+			saveButtons)
 	}
 
-	DataRecord.ensureOutputExists()
+	val WINDOW_HEIGHT: Int = 660
+	val WINDOW_WIDTH: Int = 800
+
 	stage = new JFXApp.PrimaryStage {
 		title.value = "Rapid React Scouting App"
-		minHeight = 700
-		minWidth = 1300
-		maxHeight = 700
-		maxWidth = 1300
-		height = 700
-		width = 1300
+		minHeight = WINDOW_HEIGHT
+		minWidth = WINDOW_WIDTH
+		maxHeight = WINDOW_HEIGHT
+		maxWidth = WINDOW_WIDTH
+		height = WINDOW_HEIGHT
+		width = WINDOW_WIDTH
+		fullScreen = false
 		resizable = false
-		scene = new Scene {
+		scene = new Scene(WINDOW_WIDTH, WINDOW_HEIGHT) {
 			stylesheets.add("stylesheet.css")
-			content = new GridPane {
-				prefWidth = 1300
-				prefHeight = 700
-				alignment = Pos.Center
-				hgap = 10
-				padding = Insets(10, 10, 10, 10)
+			root = new GridPane {
+				alignment = Pos.TopLeft
+				hgap = 20
+				vgap = 10
+				padding = Insets(10, 40, 10, 40)
 				background = new Background(Array(new BackgroundFill(Components.backgroundGrey, null, null)))
 				add(topBox, 0, 0)
 				add(taxiBox, 0, 1)
-				add(scoringFields, 0, 3)
-				add(saveButtons, 1, 3)
+				add(scoringFields, 0, 2)
 			}
 		}
 	}
 
+	DataRecord.ensureOutputExists()
 	stage.sizeToScene()
 	stage.minWidth = stage.width.value
 	stage.minHeight = stage.height.value
