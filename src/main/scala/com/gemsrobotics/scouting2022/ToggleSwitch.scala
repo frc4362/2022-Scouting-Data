@@ -12,7 +12,7 @@ class ToggleSwitch(
 	private val STYLE_SWITCH: String =
 		"-fx-background-color: grey; -fx-text-fill:black; -fx-background-radius: 4;"
 	private val STYLE_AFFIRMATIVE: String =
-		s"-fx-background-color: ${Components.affirmativeGreen};"
+		s"-fx-background-color: ${MyColors.AffirmativeGreen};"
 	private val STYLE_NEGATIVE: String =
 		"-fx-background-color: grey;"
 

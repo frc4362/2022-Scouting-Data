@@ -1,12 +1,18 @@
 package com.gemsrobotics.scouting2022
 
+import com.gemsrobotics.scouting2022.DataScoutingApp.teamNumberLabel
+import com.gemsrobotics.scouting2022.Utils.makeHeaderText
 import scalafx.application.JFXApp
-import scalafx.beans.property.IntegerProperty
-import scalafx.geometry.{Insets, Pos}
+import scalafx.beans.binding.{Bindings, StringBinding}
+import scalafx.beans.property.{IntegerProperty, StringProperty}
+import scalafx.geometry.{HPos, Insets, Pos, VPos}
 import scalafx.scene.Scene
 import scalafx.scene.control.Alert.AlertType
 import scalafx.scene.control._
-import scalafx.scene.layout.{Background, BackgroundFill, GridPane, HBox, VBox}
+import scalafx.scene.layout.{Background, BackgroundFill, GridPane, HBox, Priority, VBox}
+
+import scala.::
+import scala.collection.immutable.Nil.:::
 
 object DataScoutingApp extends JFXApp {
 	def userConfirm(question: String): Boolean = {
@@ -28,65 +34,78 @@ object DataScoutingApp extends JFXApp {
 	val nameTextField: TextField = new TextField
 	val emptyLabel: Label = new Label("")
 
-	val taxiLevelProperty: IntegerProperty =
-		IntegerProperty(0)
-	val taxiLevelLabel: Label = new Label("Taxi?") {
-		style = "-fx-font: 24px \"Sans\";"
+	def formatButton(button: RadioButton, group: ToggleGroup): Unit = {
+		button.style = "-fx-font-weight: bold; -fx-font-size: 14;"
+		button.setToggleGroup(group)
+		button.setSelected(false)
+		button.scaleX = 1.35
+		button.scaleY = 1.35
 	}
 
-	val autonIncrementables: Seq[Incrementable] =
-		Seq(new Incrementable("Low Scored"),
-			new Incrementable("High Scored"),
-			new Incrementable("Low Missed"),
-			new Incrementable("High Missed"))
+	// Auton taxi buttons
+	val autonTaxiTypeGroup: ToggleGroup = new ToggleGroup
+	val autonTaxiTypeButtons: Seq[RadioButton] = Seq(
+		new RadioButton("Mobility"),
+		new RadioButton("Docked"),
+		new RadioButton("Engaged")
+	)
 
-	val teleopIncrementables: Seq[Incrementable] =
-		Seq(new Incrementable("Low Scored"),
-			new Incrementable("High Scored"),
-			new Incrementable("Low Missed"),
-			new Incrementable("High Missed"))
+	autonTaxiTypeButtons.foreach(formatButton(_, autonTaxiTypeGroup))
 
-	autonIncrementables.flatMap(_.btns).foreach { btn =>
-		btn.style.value = btn.style.value + s"-fx-background-color: ${Components.resetRed};"
-	}
-	teleopIncrementables.flatMap(_.btns).foreach { btn =>
-		btn.style.value = btn.style.value + s"-fx-background-color: ${Components.rocketBlue};"
-	}
+	// Auton starting buttons
+	val autonStartingPositionGroup: ToggleGroup = new ToggleGroup
+	val autonStartingPositionButtons: Seq[RadioButton] = Seq(
+		new RadioButton("Left"),
+		new RadioButton("Center"),
+		new RadioButton("Right")
+	)
+
+	autonStartingPositionButtons.foreach(formatButton(_, autonStartingPositionGroup))
+
+	val autonStartingPositionProperty: StringProperty = new StringProperty
+	val autonStartingPositionBinding: StringBinding = Bindings.createStringBinding(() => {
+		// TODO
+		"To Do"
+	}, autonStartingPositionProperty)
+
+	val autonTaxiTypeProperty: StringProperty = new StringProperty
+	val autonTaxiTypeBinding: StringBinding = Bindings.createStringBinding(() => {
+		// TODO
+		"To Do"
+	}, autonTaxiTypeProperty)
+
+	// Teleop taxi buttons
+	val teleopTaxiTypeGroup: ToggleGroup = new ToggleGroup
+	val teleopTaxiTypeButtons: Seq[RadioButton] = Seq(
+		new RadioButton("Parked"),
+		new RadioButton("Docked"),
+		new RadioButton("Engaged")
+	)
+
+	teleopTaxiTypeButtons.foreach(formatButton(_, teleopTaxiTypeGroup))
+
+	val teleopTaxiTypeProperty: StringProperty = new StringProperty
+	val teleopTaxiTypeBinding = Bindings.createStringBinding(() => {
+		// TODO
+		"To Do"
+	}, teleopTaxiTypeProperty)
+
+	def newIncrementableGroup: Seq[Incrementable] =
+		Seq(new Incrementable("High Scored"),
+			new Incrementable("Mid Scored"),
+			new Incrementable("Low Scored"))
+
+	val autonConeIncrementables: Seq[Incrementable] = newIncrementableGroup
+	autonConeIncrementables.foreach(_.setButtonColor(MyColors.ConeYellow))
+	val autonCubeIncrementables: Seq[Incrementable] = newIncrementableGroup
+	autonCubeIncrementables.foreach(_.setButtonColor(MyColors.CubePurple))
+	val teleopConeIncrementables: Seq[Incrementable] = newIncrementableGroup
+	teleopConeIncrementables.foreach(_.setButtonColor(MyColors.ConeYellow))
+	val teleopCubeIncrementables: Seq[Incrementable] = newIncrementableGroup
+	teleopCubeIncrementables.foreach(_.setButtonColor(MyColors.CubePurple))
 
 	val coolIncrementable = new Incrementable("Cool Points")
-	coolIncrementable.btns.foreach { btn =>
-		btn.style.value = btn.style.value + s"-fx-background-color: ${Components.coolPink};"
-	}
-
-	val taxiLevelSlider: Slider = new Slider {
-		value <==> taxiLevelProperty
-		snapToTicks = true
-		showTickMarks = true
-		showTickLabels = true
-		blockIncrement = 1.0
-		majorTickUnit = 1.0
-		minorTickCount = 0
-		max = 1.0
-		min = 0.0
-	}
-
-	val climbLevelProperty: IntegerProperty =
-		IntegerProperty(0)
-	val climbLevelLabel: Label = new Label("Level Climbed") {
-		style = "-fx-font: 24px \"Sans\";"
-	}
-
-	val climbLevelSlider: Slider = new Slider {
-		value <==> climbLevelProperty
-		snapToTicks = true
-		showTickMarks = true
-		showTickLabels = true
-		blockIncrement = 1.0
-		majorTickUnit = 1.0
-		minorTickCount = 0
-		max = 4.0
-		min = 0.0
-	}
+	coolIncrementable.setButtonColor(MyColors.CoolPink)
 
 	val commentsLabel: Label = new Label("Comments") {
 		style = "-fx-font: 24px \"Sans\";"
@@ -94,33 +113,46 @@ object DataScoutingApp extends JFXApp {
 
 	val resetButton: Button =
 		new Button("Reset") {
-			prefWidth = 300
-			prefHeight = 120
-			style = style.value + s"-fx-background-color: ${Components.resetRed}; -fx-font-size: 24px;"
+			prefWidth = 280
+			prefHeight = 100
+			style = style.value + s"-fx-background-color: ${MyColors.ResetRed}; -fx-font-size: 24px; -fx-text-fill: black;"
 		}
 
 	val saveButton: Button =
 		new Button("Save") {
-			prefWidth = 300
-			prefHeight = 120
-			style = style.value + s"-fx-background-color: ${Components.affirmativeGreen}; -fx-font-size: 24px;"
+			prefWidth = 280
+			prefHeight = 100
+			style = style.value + s"-fx-background-color: ${MyColors.AffirmativeGreen}; -fx-font-size: 24px; -fx-text-fill: black;"
 		}
+
+	val teleopScoringBox: ScoringBox = new ScoringBox
+	val autonScoringBox: ScoringBox = new ScoringBox
 
 	val record = new DataRecord(
 		matchNumberTextField.text,
 		teamNumberTextField.text,
 		nameTextField.text,
-		taxiLevelProperty,
-		autonIncrementables(0).count,
-		autonIncrementables(1).count,
-		autonIncrementables(2).count,
-		autonIncrementables(3).count,
-		teleopIncrementables(0).count,
-		teleopIncrementables(1).count,
-		teleopIncrementables(2).count,
-		teleopIncrementables(3).count,
-		climbLevelProperty,
-		coolIncrementable.count)
+
+		autonTaxiTypeButtons,
+		autonStartingPositionButtons,
+		teleopTaxiTypeButtons,
+
+		autonScoringBox.incrementables(0).count,
+		autonScoringBox.incrementables(1).count,
+		autonScoringBox.incrementables(2).count,
+		autonScoringBox.incrementables(3).count,
+		autonScoringBox.incrementables(4).count,
+		autonScoringBox.incrementables(5).count,
+
+		teleopScoringBox.incrementables(0).count,
+		teleopScoringBox.incrementables(1).count,
+		teleopScoringBox.incrementables(2).count,
+		teleopScoringBox.incrementables(3).count,
+		teleopScoringBox.incrementables(4).count,
+		teleopScoringBox.incrementables(5).count,
+
+		coolIncrementable.count
+	)
 
 	resetButton.onMouseClicked = { _ =>
 		if (userConfirm("Are you sure you want to reset?\nTHIS IS IRREVERSIBLE")) {
@@ -134,79 +166,66 @@ object DataScoutingApp extends JFXApp {
 		}
 	}
 
-	val topBox = new HBox {
-		spacing = 10
+	// Event fields
+	val eventBox = new HBox {
+		spacing = 20
 		children = Seq(
 			eventKeyLabel,
 			nameLabel,
 			nameTextField)
 	}
 
-	val taxiBox = new HBox {
-		spacing = 10
+	val matchBox = new HBox {
+		spacing = 20
 		children = Seq(
 			teamNumberLabel,
 			teamNumberTextField,
 			matchNumberLabel,
-			matchNumberTextField,
-			taxiLevelLabel,
-			taxiLevelSlider)
+			matchNumberTextField
+		)
+	}
+
+	val header = new VBox {
+		spacing = 5
+		children = Seq(
+			eventBox,
+			matchBox
+		)
 	}
 
 	val climbBox = new HBox {
 		spacing = 10
-		children = Seq(
-			climbLevelLabel,
-			climbLevelSlider)
+		children = Seq()
 	}
-
 
 	val autonTextBox = new Label("Auton Scoring")
 	autonTextBox.style = "-fx-font-weight: bold"
 
-	val autonFields = new VBox {
-		spacing = 5
-		children = Seq(
-			autonTextBox,
-			autonIncrementables(1),
-			autonIncrementables(0),
-			autonIncrementables(3),
-			autonIncrementables(2))
-	}
-
 	val teleopTextBox = new Label("Teleop Scoring")
 	teleopTextBox.style = "-fx-font-weight: bold"
 
-	val teleopFields = new VBox {
-		spacing = 5
-		children = Seq(
-			teleopTextBox,
-			teleopIncrementables(1),
-			teleopIncrementables(0),
-			teleopIncrementables(3),
-			teleopIncrementables(2))
+	val autonStartingPositionQuestion = new HBox {
+		spacing = 90
+		children = Seq(new Label("")) ++ autonStartingPositionButtons
+		GridPane.setHalignment(this, HPos.Center)
 	}
 
-	val saveButtons = new VBox {
+	def makeTaxiQuestion(buttons: Seq[RadioButton]): VBox = new VBox {
+		spacing = 30
+		children = buttons
+		alignment = Pos.Center
+	}
+
+	val saveRow = new HBox {
 		spacing = 10
 		children = Seq(
-			emptyLabel,
-			coolIncrementable,
-			climbBox,
-			resetButton,
-			saveButton)
+			saveButton,
+			resetButton
+		)
 	}
 
-	val scoringFields = new HBox {
-		spacing = 10
-		children = Seq(
-			autonFields,
-			teleopFields,
-			saveButtons)
-	}
-
-	val WINDOW_HEIGHT: Int = 660
-	val WINDOW_WIDTH: Int = 800
+	val WINDOW_HEIGHT: Int = 900
+	val WINDOW_WIDTH: Int = 1300
 
 	stage = new JFXApp.PrimaryStage {
 		title.value = "Rapid React Scouting App"
@@ -225,10 +244,16 @@ object DataScoutingApp extends JFXApp {
 				hgap = 20
 				vgap = 10
 				padding = Insets(10, 40, 10, 40)
-				background = new Background(Array(new BackgroundFill(Components.backgroundGrey, null, null)))
-				add(topBox, 0, 0)
-				add(taxiBox, 0, 1)
-				add(scoringFields, 0, 2)
+				background = new Background(Array(new BackgroundFill(MyColors.BackgroundGrey, null, null)))
+				add(header, 0, 0)
+				add(saveRow, 1, 0)
+				add(makeHeaderText("Auton"), 0, 1)
+				add(makeHeaderText("Teleop"), 1, 1)
+				add(autonStartingPositionQuestion, 0, 2)
+				add(autonScoringBox, 0, 3)
+				add(teleopScoringBox, 1, 3)
+				add(makeTaxiQuestion(autonTaxiTypeButtons), 0, 4)
+				add(makeTaxiQuestion(teleopTaxiTypeButtons), 1, 4)
 			}
 		}
 	}

@@ -12,10 +12,7 @@ protected class MyButton(text: String) extends Button(text) {
 	font = Font("Consolas", FontWeight.Bold, 20)
 }
 
-class Incrementable(
-     name: String,
-     startingValue: Int = 0
-) extends VBox {
+class Incrementable(val name: String, val startingValue: Int = 0) extends VBox {
 	private val countLabel = new Label {
 		text = startingValue.toString
 		font = Font("Tahoma", FontWeight.Normal, 48)
@@ -36,7 +33,7 @@ class Incrementable(
 		countLabel.text = newValue.toString
 	}
 
-	val btns = Seq(
+	val buttons = Seq(
 		new MyButton("-") {
 			onMouseClicked = { _ =>
 				if (count.value > 0) {
@@ -51,14 +48,19 @@ class Incrementable(
 		}
 	)
 
-	private val buttons = new HBox {
+	private val myButtons = new HBox {
 		spacing = 10
-		children = btns
+		children = buttons
 	}
+
+	def setButtonColor(color: String): Unit =
+		buttons.foreach { button =>
+			button.style.value = button.style.value + s"-fx-background-color: ${color};"
+		}
 
 	children = Seq(
 		nameLabel,
 		countLabel,
-		buttons
+		myButtons
 	)
 }

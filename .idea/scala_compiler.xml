@@ -2,6 +2,6 @@
 <project version="4">
   <component name="ScalaCompilerConfiguration">
     <option name="incrementalityType" value="SBT" />
-    <profile name="sbt 1" modules="data_app,notes_app,root,scoutingapp2019,src-data_app,target-data_app,target-notes_app" />
+    <profile name="sbt 1" modules="data_app,notes_app,root,scoutingapp2019,scoutingapp2022,src-data_app,target-data_app,target-notes_app" />
   </component>
 </project>
