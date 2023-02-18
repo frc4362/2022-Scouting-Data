@@ -16,7 +16,7 @@ object Utils {
 
 	def makeHeaderText(myText: String): Label = new Label {
 		text = myText
-		style = "-fx-font-weight: bold; -fx-font-size: 32;"
+		style = "-fx-font-weight: bold; -fx-font-size: 20;"
 		GridPane.setHalignment(this, HPos.Center)
 		GridPane.setValignment(this, VPos.Bottom)
 	}

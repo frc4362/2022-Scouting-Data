@@ -1,6 +1,6 @@
-name := "scoutingapp2022"
+name := "scoutingapp2023"
 
-version := "0.2.0"
+version := "0.0.5"
 
 scalaVersion := "2.12.8"
 scalaSource in Compile := baseDirectory.value / "src" / "main" / "scala"
@@ -19,7 +19,7 @@ javaFxMainClass := "com.gemsrobotics.scouting2022.DataScoutingApp"
 fork in run := true
 
 fullClasspath in assembly := (fullClasspath in Compile).value
-assemblyJarName in assembly := s"gemscout4v${version.value}.jar"
+assemblyJarName in assembly := s"gemscout5v${version.value}.jar"
 
 libraryDependencies ++= Seq(
 	"org.scalafx" %% "scalafx" % "11-R16",

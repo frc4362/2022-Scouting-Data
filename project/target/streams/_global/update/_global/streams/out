@@ -1,3 +1,4 @@
 [debug] not up to date. inChanged = true, force = false
-[debug] Updating ProjectRef(uri("file:/C:/Users/Ethan/Documents/GitHub/2022-Scouting-Data/project/"), "root-2022-scouting-data-build")...
-[debug] Done updating ProjectRef(uri("file:/C:/Users/Ethan/Documents/GitHub/2022-Scouting-Data/project/"), "root-2022-scouting-data-build")
+[debug] Updating ProjectRef(uri("file:/C:/Users/ejmal/Desktop/2022-Scouting-Data/project/"), "root-2022-scouting-data-build")...
+[warn] Unrecognized repository Scala Plugin Bundled Repository, ignoring it
+[debug] Done updating ProjectRef(uri("file:/C:/Users/ejmal/Desktop/2022-Scouting-Data/project/"), "root-2022-scouting-data-build")

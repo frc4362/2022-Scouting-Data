@@ -15,7 +15,7 @@ protected class MyButton(text: String) extends Button(text) {
 class Incrementable(val name: String, val startingValue: Int = 0) extends VBox {
 	private val countLabel = new Label {
 		text = startingValue.toString
-		font = Font("Tahoma", FontWeight.Normal, 48)
+		font = Font("Tahoma", FontWeight.Normal, 36)
 		alignment = Pos.BaselineCenter
 		textAlignment = TextAlignment.Center
 		prefWidth = 215
