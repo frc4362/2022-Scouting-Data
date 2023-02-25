@@ -5,7 +5,7 @@ import com.gemsrobotics.scouting2022.Utils.bool2Int
 import java.nio.file.{Files, Path, Paths}
 import com.github.tototoshi.csv.{CSVFormat, CSVWriter}
 import scalafx.beans.property.{IntegerProperty, StringProperty}
-import scalafx.scene.control.{Alert, RadioButton, ToggleGroup}
+import scalafx.scene.control.Alert
 import scalafx.scene.control.Alert.AlertType
 
 import scala.util.Try
@@ -14,14 +14,11 @@ import scala.collection.mutable
 import scala.collection.mutable.MutableList
 
 object DataRecord {
-	val SCHEMA_VERSION: String =
-		"0.1"
-
-	val EVENT_KEY: String =
-		"2023gems"
+	private val SCHEMA_VERSION: String = "0.2"
+	val EVENT_KEY: String = "2023pre"
 
 	private val HEADER: String =
-		""""Schema Version","Event Key","Match #","Team #","Scout","Auton Mobility","Auton Taxi","Auton Starting Pos","Teleop Taxi","Auton Cube Score High","Auton Cube Scored Mid","Auton Cube Scored Low","Auton Cone Scored High","Auton Cone Scored Mid","Auton Cone Scored Low","Teleop Cube Scored High","Teleop Cube Scored Mid","Teleop Cube Scored Low", "Teleop Cone Scored High","Teleop Cone Scored Mid","Teleop Cone Scored Low","Cool Points""""
+		""""Schema Version","Event Key","Match #","Team #","Scout","Auton Taxi","Auton Starting Pos","Teleop Taxi","Auton Cube Score High","Auton Cube Scored Mid","Auton Cube Scored Low","Auton Cone Scored High","Auton Cone Scored Mid","Auton Cone Scored Low","Teleop Cube Scored High","Teleop Cube Scored Mid","Teleop Cube Scored Low", "Teleop Cone Scored High","Teleop Cone Scored Mid","Teleop Cone Scored Low""""
 
 	private val OUTPUT_PATH: Path =
 		Paths.get(System.getProperty("user.dir") + "\\gemscoutput.csv")
@@ -29,7 +26,7 @@ object DataRecord {
 	private implicit val format: CSVFormat =
 		new MyCSVFormat
 
-	val writer: CSVWriter =
+	private val writer: CSVWriter =
 		CSVWriter.open(OUTPUT_PATH.toFile, append=true)(format)
 
 	def ensureOutputExists(): Unit = {
@@ -52,8 +49,8 @@ class DataRecord(
   val mobilityButton: RadioButton,
   val autonTaxiTypeButtons: Seq[RadioButton],
   val autonStartingPositionButtons: Seq[RadioButton],
-  val teleopTaxiTypeButtons: Seq[RadioButton],
 
+  val teleopTaxiTypeButtons: Seq[RadioButton],
   val autonCubeScoredHigh: IntegerProperty,
   val autonCubeScoredMid: IntegerProperty,
   val autonCubeScoredLow: IntegerProperty,
@@ -108,25 +105,8 @@ class DataRecord(
 		coolPoints.value = 0
 	}
 
-	def isValid: Boolean = {
-		if (!autonStartingPositionButtons.exists(_.isSelected)) {
-			false
-		} else if (!autonTaxiTypeButtons.exists(_.isSelected)) {
-			false
-		} else if (!teleopTaxiTypeButtons.exists(_.isSelected)) {
-			false
-		} else {
-			(matchNumber.isNotEmpty
-				and teamNumber.isNotEmpty
-				and scoutName.isNotEmpty).get
-		}
-	}
-
-	private def findValue(buttons: Seq[RadioButton]): String =
-		autonTaxiTypeButtons.find(_.isSelected).map(_.text.get).getOrElse("None")
-
 	def save(): Unit = {
-		val problems: mutable.MutableList[String] = MutableList.empty[String]
+		val problems: mutable.MutableList[String] = mutable.MutableList.empty[String]
 
 		val matchNum = matchNumber.get
 		val teamNum = teamNumber.get
@@ -148,16 +128,8 @@ class DataRecord(
 			problems += "Scout name unspecified"
 		}
 
-		if (!autonTaxiTypeButtons.exists(_.isSelected)) {
-			problems += "Auton taxi type unspecified"
-		}
-
-		if (!autonStartingPositionButtons.exists(_.isSelected)) {
+		if (!autonStartingPositionQuestion.isSelected) {
 			problems += "Auton starting position unspecified"
-		}
-
-		if (!teleopTaxiTypeButtons.exists(_.isSelected)) {
-			problems += "Teleop taxi type unspecified"
 		}
 
 		if (problems.isEmpty) {
@@ -167,6 +139,7 @@ class DataRecord(
 				matchNum,
 				teamNum,
 				name,
+
 				mobilityButton.selected.get.toInt,
 				findValue(autonTaxiTypeButtons),
 				findValue(autonStartingPositionButtons),

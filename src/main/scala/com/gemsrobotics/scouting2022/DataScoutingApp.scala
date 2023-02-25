@@ -94,21 +94,17 @@ object DataScoutingApp extends JFXApp {
 	val coolIncrementable = new Incrementable("Cool Points")
 	coolIncrementable.setButtonColor(MyColors.CoolPink)
 
-	val commentsLabel: Label = new Label("Comments") {
-		style = "-fx-font: 24px \"Sans\";"
-	}
-
 	val resetButton: Button =
 		new Button("Reset") {
-			prefWidth = 280
-			prefHeight = 100
+			prefWidth = 200
+			prefHeight = 80
 			style = style.value + s"-fx-background-color: ${MyColors.ResetRed}; -fx-font-size: 24px; -fx-text-fill: black;"
 		}
 
 	val saveButton: Button =
 		new Button("Save") {
-			prefWidth = 280
-			prefHeight = 100
+			prefWidth = 200
+			prefHeight = 80
 			style = style.value + s"-fx-background-color: ${MyColors.AffirmativeGreen}; -fx-font-size: 24px; -fx-text-fill: black;"
 		}
 
@@ -181,26 +177,21 @@ object DataScoutingApp extends JFXApp {
 		)
 	}
 
-	val climbBox = new HBox {
-		spacing = 10
-		children = Seq()
-	}
-
 	val autonTextBox = new Label("Auton Scoring")
 	autonTextBox.style = "-fx-font-weight: bold"
 
 	val teleopTextBox = new Label("Teleop Scoring")
 	teleopTextBox.style = "-fx-font-weight: bold"
 
-	val autonStartingPositionQuestion = new HBox {
+	val autonStartingPositionQuestionBox = new HBox {
 		spacing = 90
-		children = Seq(new Label("")) ++ autonStartingPositionButtons
+		children = Seq(new Label("")) ++ autonStartingPositionQuestion.buttons
 		GridPane.setHalignment(this, HPos.Center)
 	}
 
-	def makeTaxiQuestion(buttons: Seq[RadioButton]): VBox = new VBox {
-		spacing = 30
-		children = buttons
+	def makeTaxiQuestionBox(question: MultipleChoice): VBox = new VBox {
+		spacing = 15
+		children = question.buttons
 		alignment = Pos.Center
 	}
 
@@ -212,32 +203,30 @@ object DataScoutingApp extends JFXApp {
 		)
 	}
 
-	val WINDOW_HEIGHT: Int = 900
-	val WINDOW_WIDTH: Int = 1300
+	val WINDOW_HEIGHT: Int = 640
+	val WINDOW_WIDTH: Int = 1100
 
 	stage = new JFXApp.PrimaryStage {
-		title.value = "Rapid React Scouting App"
+		title.value = "Charged Up Scouting App"
 		minHeight = WINDOW_HEIGHT
 		minWidth = WINDOW_WIDTH
 		maxHeight = WINDOW_HEIGHT
 		maxWidth = WINDOW_WIDTH
-		height = WINDOW_HEIGHT
-		width = WINDOW_WIDTH
 		fullScreen = false
 		resizable = false
 		scene = new Scene(WINDOW_WIDTH, WINDOW_HEIGHT) {
 			stylesheets.add("stylesheet.css")
 			root = new GridPane {
 				alignment = Pos.TopLeft
-				hgap = 20
-				vgap = 10
-				padding = Insets(10, 40, 10, 40)
+				hgap = 0
+				vgap = 5
+				padding = Insets(0, 10, 0, 10)
 				background = new Background(Array(new BackgroundFill(MyColors.BackgroundGrey, null, null)))
 				add(header, 0, 0)
 				add(saveRow, 1, 0)
 				add(makeHeaderText("Auton"), 0, 1)
 				add(makeHeaderText("Teleop"), 1, 1)
-				add(autonStartingPositionQuestion, 0, 2)
+				add(autonStartingPositionQuestionBox, 0, 2)
 				add(autonScoringBox, 0, 3)
 				add(teleopScoringBox, 1, 3)
 				add(makeTaxiQuestion(mobilityButton :: autonTaxiTypeButtons.toList), 0, 4)

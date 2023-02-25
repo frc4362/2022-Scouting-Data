@@ -20,11 +20,11 @@ class ScoringBox extends VBox {
 	private val lowCube = new Incrementable("")
 	lowCube.setButtonColor(MyColors.CubePurple)
 
-	spacing = 6
+	spacing = 0
 	children = new GridPane {
 		alignment = Pos.Center
 		hgap = 5
-		vgap = 5
+		vgap = 0
 		padding = Insets(0, 0, 0, 0)
 		add(makeHeaderText("Cone"), 1, 0)
 		add(makeHeaderText("Cube"), 2, 0)
