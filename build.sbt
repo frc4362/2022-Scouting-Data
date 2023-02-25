@@ -1,6 +1,6 @@
-name := "scoutingapp2022"
+name := "scoutingapp2023"
 
-version := "0.2.0"
+version := "0.0.1"
 
 scalaVersion := "2.12.8"
 scalaSource in Compile := baseDirectory.value / "src" / "main" / "scala"

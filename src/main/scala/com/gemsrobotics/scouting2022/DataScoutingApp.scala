@@ -1,18 +1,12 @@
 package com.gemsrobotics.scouting2022
 
-import com.gemsrobotics.scouting2022.DataScoutingApp.teamNumberLabel
 import com.gemsrobotics.scouting2022.Utils.makeHeaderText
 import scalafx.application.JFXApp
-import scalafx.beans.binding.{Bindings, StringBinding}
-import scalafx.beans.property.{IntegerProperty, StringProperty}
 import scalafx.geometry.{HPos, Insets, Pos, VPos}
 import scalafx.scene.Scene
 import scalafx.scene.control.Alert.AlertType
 import scalafx.scene.control._
-import scalafx.scene.layout.{Background, BackgroundFill, GridPane, HBox, Priority, VBox}
-
-import scala.::
-import scala.collection.immutable.Nil.:::
+import scalafx.scene.layout.{Background, BackgroundFill, GridPane, HBox, VBox}
 
 object DataScoutingApp extends JFXApp {
 	def userConfirm(question: String): Boolean = {
@@ -32,12 +26,10 @@ object DataScoutingApp extends JFXApp {
 	val matchNumberTextField: TextField = new TextField
 	val nameLabel: Label = new Label("    Name")
 	val nameTextField: TextField = new TextField
-	val emptyLabel: Label = new Label("")
 
-	def formatButton(button: RadioButton, group: ToggleGroup): Unit = {
+	def formatButton(button: RadioButton): Unit = {
 		button.style = "-fx-font-weight: bold; -fx-font-size: 14;"
-		button.setToggleGroup(group)
-		button.setSelected(false)
+		button.setSelected(button.text.value == "None")
 		button.scaleX = 1.35
 		button.scaleY = 1.35
 	}
@@ -45,12 +37,15 @@ object DataScoutingApp extends JFXApp {
 	// Auton taxi buttons
 	val autonTaxiTypeGroup: ToggleGroup = new ToggleGroup
 	val autonTaxiTypeButtons: Seq[RadioButton] = Seq(
-		new RadioButton("Mobility"),
+		new RadioButton("None"),
 		new RadioButton("Docked"),
 		new RadioButton("Engaged")
 	)
 
-	autonTaxiTypeButtons.foreach(formatButton(_, autonTaxiTypeGroup))
+	autonTaxiTypeButtons.foreach { button =>
+		formatButton(button)
+		button.setToggleGroup(autonTaxiTypeGroup)
+	}
 
 	// Auton starting buttons
 	val autonStartingPositionGroup: ToggleGroup = new ToggleGroup
@@ -60,35 +55,27 @@ object DataScoutingApp extends JFXApp {
 		new RadioButton("Right")
 	)
 
-	autonStartingPositionButtons.foreach(formatButton(_, autonStartingPositionGroup))
+	autonStartingPositionButtons.foreach { button =>
+		formatButton(button)
+		button.setToggleGroup(autonStartingPositionGroup)
+	}
 
-	val autonStartingPositionProperty: StringProperty = new StringProperty
-	val autonStartingPositionBinding: StringBinding = Bindings.createStringBinding(() => {
-		// TODO
-		"To Do"
-	}, autonStartingPositionProperty)
-
-	val autonTaxiTypeProperty: StringProperty = new StringProperty
-	val autonTaxiTypeBinding: StringBinding = Bindings.createStringBinding(() => {
-		// TODO
-		"To Do"
-	}, autonTaxiTypeProperty)
+	val mobilityButton = new RadioButton("Mobility")
+	formatButton(mobilityButton)
 
 	// Teleop taxi buttons
 	val teleopTaxiTypeGroup: ToggleGroup = new ToggleGroup
 	val teleopTaxiTypeButtons: Seq[RadioButton] = Seq(
+		new RadioButton("None"),
 		new RadioButton("Parked"),
 		new RadioButton("Docked"),
 		new RadioButton("Engaged")
 	)
 
-	teleopTaxiTypeButtons.foreach(formatButton(_, teleopTaxiTypeGroup))
-
-	val teleopTaxiTypeProperty: StringProperty = new StringProperty
-	val teleopTaxiTypeBinding = Bindings.createStringBinding(() => {
-		// TODO
-		"To Do"
-	}, teleopTaxiTypeProperty)
+	teleopTaxiTypeButtons.foreach { button =>
+		formatButton(button)
+		button.setToggleGroup(teleopTaxiTypeGroup)
+	}
 
 	def newIncrementableGroup: Seq[Incrementable] =
 		Seq(new Incrementable("High Scored"),
@@ -133,6 +120,7 @@ object DataScoutingApp extends JFXApp {
 		teamNumberTextField.text,
 		nameTextField.text,
 
+		mobilityButton,
 		autonTaxiTypeButtons,
 		autonStartingPositionButtons,
 		teleopTaxiTypeButtons,
@@ -252,7 +240,7 @@ object DataScoutingApp extends JFXApp {
 				add(autonStartingPositionQuestion, 0, 2)
 				add(autonScoringBox, 0, 3)
 				add(teleopScoringBox, 1, 3)
-				add(makeTaxiQuestion(autonTaxiTypeButtons), 0, 4)
+				add(makeTaxiQuestion(mobilityButton :: autonTaxiTypeButtons.toList), 0, 4)
 				add(makeTaxiQuestion(teleopTaxiTypeButtons), 1, 4)
 			}
 		}

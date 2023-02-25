@@ -1,5 +1,7 @@
 package com.gemsrobotics.scouting2022
 
+import com.gemsrobotics.scouting2022.Utils.bool2Int
+
 import java.nio.file.{Files, Path, Paths}
 import com.github.tototoshi.csv.{CSVFormat, CSVWriter}
 import scalafx.beans.property.{IntegerProperty, StringProperty}
@@ -13,13 +15,13 @@ import scala.collection.mutable.MutableList
 
 object DataRecord {
 	val SCHEMA_VERSION: String =
-		"0.0"
+		"0.1"
 
 	val EVENT_KEY: String =
 		"2023gems"
 
 	private val HEADER: String =
-		""""Schema Version","Event Key","Match #","Team #","Scout","Auton Taxi","Auton Starting Pos","Teleop Taxi","Auton Cube Score High","Auton Cube Scored Mid","Auton Cube Scored Low","Auton Cone Scored High","Auton Cone Scored Mid","Auton Cone Scored Low","Teleop Cube Scored High","Teleop Cube Scored Mid","Teleop Cube Scored Low", "Teleop Cone Scored High","Teleop Cone Scored Mid","Teleop Cone Scored Low","Cool Points""""
+		""""Schema Version","Event Key","Match #","Team #","Scout","Auton Mobility","Auton Taxi","Auton Starting Pos","Teleop Taxi","Auton Cube Score High","Auton Cube Scored Mid","Auton Cube Scored Low","Auton Cone Scored High","Auton Cone Scored Mid","Auton Cone Scored Low","Teleop Cube Scored High","Teleop Cube Scored Mid","Teleop Cube Scored Low", "Teleop Cone Scored High","Teleop Cone Scored Mid","Teleop Cone Scored Low","Cool Points""""
 
 	private val OUTPUT_PATH: Path =
 		Paths.get(System.getProperty("user.dir") + "\\gemscoutput.csv")
@@ -47,6 +49,7 @@ class DataRecord(
   val teamNumber: StringProperty,
   val scoutName: StringProperty,
 
+  val mobilityButton: RadioButton,
   val autonTaxiTypeButtons: Seq[RadioButton],
   val autonStartingPositionButtons: Seq[RadioButton],
   val teleopTaxiTypeButtons: Seq[RadioButton],
@@ -79,9 +82,14 @@ class DataRecord(
 		// scoutName doesn't reset
 
 		// reset radio buttons
-		autonTaxiTypeButtons.foreach(_.setSelected(false))
-		autonStartingPositionButtons.foreach(_.setSelected(false))
-		teleopTaxiTypeButtons.foreach(_.setSelected(false))
+		autonTaxiTypeButtons.foreach { button =>
+			button.selected = button.text.value == "None"
+		}
+		autonStartingPositionButtons.foreach(_.selected = false)
+		teleopTaxiTypeButtons.foreach { button =>
+			button.selected = button.text.value == "None"
+		}
+		mobilityButton.selected = false
 
 		autonCubeScoredHigh.value = 0
 		autonCubeScoredMid.value = 0
@@ -159,6 +167,7 @@ class DataRecord(
 				matchNum,
 				teamNum,
 				name,
+				mobilityButton.selected.get.toInt,
 				findValue(autonTaxiTypeButtons),
 				findValue(autonStartingPositionButtons),
 				findValue(teleopTaxiTypeButtons),
@@ -177,7 +186,7 @@ class DataRecord(
 				teleopConeScoredMid.get,
 				teleopConeScoredLow.get,
 
-				0 // for now coolPoints.get
+//				0 // for now coolPoints.get
 			)
 
 			writer.writeRow(fields)
