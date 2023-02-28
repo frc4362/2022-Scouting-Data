@@ -1,4 +1,5 @@
+"Schema Version","Event Key","Match #","Team #","Scout","Auton Mobility","Auton Charge","Auton Starting Pos","Endgame","Auton Cube Score High","Auton Cube Scored Mid","Auton Cube Scored Low","Auton Cone Scored High","Auton Cone Scored Mid","Auton Cone Scored Low","Teleop Cube Scored High","Teleop Cube Scored Mid","Teleop Cube Scored Low", "Teleop Cone Scored High","Teleop Cone Scored Mid","Teleop Cone Scored Low"
 "Schema Version","Event Key","Match #","Team #","Scout","Auton Taxi","Auton Starting Pos","Teleop Taxi","Auton Cube Score High","Auton Cube Scored Mid","Auton Cube Scored Low","Auton Cone Scored High","Auton Cone Scored Mid","Auton Cone Scored Low","Teleop Cube Scored High","Teleop Cube Scored Mid","Teleop Cube Scored Low", "Teleop Cone Scored High","Teleop Cone Scored Mid","Teleop Cone Scored Low"
 "0.2","2023pre","1","4362","ethan","-1","1","-1","0","0","0","2","0","0","0","0","0","0","0","0"
 "0.2","2023pre","999","999","ethan","-1","1","-1","0","0","0","0","0","0","0","0","0","0","0","0"
-"0.2","2023pre","1000","777","ethan","0","0","1","0","1","1","2","1","1","1","0","1","0","1","0"
+"0.2","2023pre","1000","777","ethan","0","0","1","0","1","1","2","1","1","1","0","1","0","1","0""0.3","2023pre","123","2342","ethan","0","1","1","2","0","2","0","2","0","1","1","0","0","0","1","1"

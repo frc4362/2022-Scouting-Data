@@ -27,14 +27,17 @@ object DataScoutingApp extends JFXApp {
 	val nameLabel: Label = new Label("    Name")
 	val nameTextField: TextField = new TextField
 
+	val autonMobilityButton = new RadioButton("Mobility")
+	MultipleChoice.styleButton(autonMobilityButton)
+
 	// Auton taxi buttons
-	val autonTaxiQuestion = new MultipleChoice(Vector("Mobility", "Docked", "Engaged"))
+	val autonTaxiQuestion = new MultipleChoice(Vector("None", "Docked", "Engaged"))
 
 	// Auton starting buttons
 	val autonStartingPositionQuestion = new MultipleChoice(Vector("Left", "Center", "Right"))
 
 	// Teleop taxi buttons
-	val teleopTaxiQuestion = new MultipleChoice(Vector("Parked", "Docked", "Engaged"))
+	val teleopTaxiQuestion = new MultipleChoice(Vector("None", "Parked", "Docked", "Engaged"))
 
 	val coolIncrementable = new Incrementable("Cool Points")
 	coolIncrementable.setButtonColor(MyColors.CoolPink)
@@ -61,6 +64,7 @@ object DataScoutingApp extends JFXApp {
 		teamNumberTextField.text,
 		nameTextField.text,
 
+		autonMobilityButton,
 		autonTaxiQuestion,
 		autonStartingPositionQuestion,
 		teleopTaxiQuestion,
@@ -133,9 +137,9 @@ object DataScoutingApp extends JFXApp {
 		GridPane.setHalignment(this, HPos.Center)
 	}
 
-	def makeTaxiQuestionBox(question: MultipleChoice): VBox = new VBox {
+	def makeTaxiQuestionBox(question: Seq[RadioButton]): VBox = new VBox {
 		spacing = 15
-		children = question.buttons
+		children = question
 		alignment = Pos.Center
 	}
 
@@ -147,7 +151,7 @@ object DataScoutingApp extends JFXApp {
 		)
 	}
 
-	val WINDOW_HEIGHT: Int = 640
+	val WINDOW_HEIGHT: Int = 680
 	val WINDOW_WIDTH: Int = 1100
 
 	stage = new JFXApp.PrimaryStage {
@@ -173,8 +177,8 @@ object DataScoutingApp extends JFXApp {
 				add(autonStartingPositionQuestionBox, 0, 2)
 				add(autonScoringBox, 0, 3)
 				add(teleopScoringBox, 1, 3)
-				add(makeTaxiQuestionBox(autonTaxiQuestion), 0, 4)
-				add(makeTaxiQuestionBox(teleopTaxiQuestion), 1, 4)
+				add(makeTaxiQuestionBox(autonMobilityButton :: autonTaxiQuestion.buttons.toList), 0, 4)
+				add(makeTaxiQuestionBox(teleopTaxiQuestion.buttons.toList), 1, 4)
 			}
 		}
 	}

@@ -1,22 +1,23 @@
 package com.gemsrobotics.scouting2022
 
+import com.gemsrobotics.scouting2022.Utils.bool2Int
+
 import java.nio.file.{Files, Path, Paths}
 import com.github.tototoshi.csv.{CSVFormat, CSVWriter}
 import scalafx.beans.property.{IntegerProperty, StringProperty}
-import scalafx.scene.control.Alert
+import scalafx.scene.control.{Alert, RadioButton}
 import scalafx.scene.control.Alert.AlertType
 
 import scala.util.Try
 import scala.collection.JavaConverters._
 import scala.collection.mutable
-import scala.collection.mutable.MutableList
 
 object DataRecord {
-	private val SCHEMA_VERSION: String = "0.2"
-	val EVENT_KEY: String = "2023pre"
+	private val SCHEMA_VERSION: String = "0.3"
+	val EVENT_KEY: String = "2023mimil"
 
 	private val HEADER: String =
-		""""Schema Version","Event Key","Match #","Team #","Scout","Auton Taxi","Auton Starting Pos","Teleop Taxi","Auton Cube Score High","Auton Cube Scored Mid","Auton Cube Scored Low","Auton Cone Scored High","Auton Cone Scored Mid","Auton Cone Scored Low","Teleop Cube Scored High","Teleop Cube Scored Mid","Teleop Cube Scored Low", "Teleop Cone Scored High","Teleop Cone Scored Mid","Teleop Cone Scored Low""""
+		""""Schema Version","Event Key","Match #","Team #","Scout","Auton Mobility","Auton Charge","Auton Starting Pos","Endgame","Auton Cube Score High","Auton Cube Scored Mid","Auton Cube Scored Low","Auton Cone Scored High","Auton Cone Scored Mid","Auton Cone Scored Low","Teleop Cube Scored High","Teleop Cube Scored Mid","Teleop Cube Scored Low", "Teleop Cone Scored High","Teleop Cone Scored Mid","Teleop Cone Scored Low""""
 
 	private val OUTPUT_PATH: Path =
 		Paths.get(System.getProperty("user.dir") + "\\gemscoutput.csv")
@@ -44,6 +45,7 @@ class DataRecord(
   val teamNumber: StringProperty,
   val scoutName: StringProperty,
 
+  val mobilityButton: RadioButton,
   val autonTaxiTypeQuestion: MultipleChoice,
   val autonStartingPositionQuestion: MultipleChoice,
   val teleopTaxiTypeQuestion: MultipleChoice,
@@ -76,6 +78,7 @@ class DataRecord(
 		// scoutName doesn't reset
 
 		// reset radio buttons
+		mobilityButton.selected = false
 		autonTaxiTypeQuestion.reset()
 		autonStartingPositionQuestion.reset()
 		teleopTaxiTypeQuestion.reset()
@@ -132,6 +135,7 @@ class DataRecord(
 				teamNum,
 				name,
 
+				mobilityButton.selected.value.toInt,
 				autonTaxiTypeQuestion.selectedID.getOrElse(-1),
 				autonStartingPositionQuestion.selectedID.getOrElse(-1),
 				teleopTaxiTypeQuestion.selectedID.getOrElse(-1),

@@ -1,21 +1,30 @@
 package com.gemsrobotics.scouting2022
 
+import com.gemsrobotics.scouting2022.MultipleChoice.styleButton
 import scalafx.scene.control.{RadioButton, ToggleGroup}
+
+object MultipleChoice {
+	def styleButton(button: RadioButton): Unit = {
+		button.style = "-fx-font-weight: bold; -fx-font-size: 14;"
+		button.scaleX = 1.35
+		button.scaleY = 1.35
+	}
+}
 
 class MultipleChoice(names: Vector[String]) {
 	val buttons: Vector[RadioButton] = names.map(new RadioButton(_))
 	val group = new ToggleGroup
 
 	buttons.foreach { button =>
-		button.style = "-fx-font-weight: bold; -fx-font-size: 14;"
+		styleButton(button)
 		button.toggleGroup = group
 		button.selected = false
-		button.scaleX = 1.35
-		button.scaleY = 1.35
 	}
 
 	def reset(): Unit =
-		buttons.foreach(_.selected = false)
+		buttons.foreach { button =>
+			button.selected = button.text.get == "None"
+		}
 
 	def isSelected: Boolean =
 		buttons.exists(_.isSelected)

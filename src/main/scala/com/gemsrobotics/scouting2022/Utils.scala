@@ -7,11 +7,7 @@ import scalafx.scene.layout.GridPane
 object Utils {
 	implicit class bool2Int(bool: Boolean) {
 		def toInt: Int =
-			if (bool) {
-				1
-			} else {
-				0
-			}
+			if (bool) 1 else 0
 	}
 
 	def makeHeaderText(myText: String): Label = new Label {
