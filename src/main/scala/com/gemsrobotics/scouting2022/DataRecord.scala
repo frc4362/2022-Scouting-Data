@@ -14,7 +14,7 @@ import scala.collection.mutable
 
 object DataRecord {
 	private val SCHEMA_VERSION: String = "0.3"
-	val EVENT_KEY: String = "2023mimil"
+	val EVENT_KEY: String = "2023mibel"
 
 	private val HEADER: String =
 		""""Schema Version","Event Key","Match #","Team #","Scout","Auton Mobility","Auton Charge","Auton Starting Pos","Endgame","Auton Cube Score High","Auton Cube Scored Mid","Auton Cube Scored Low","Auton Cone Scored High","Auton Cone Scored Mid","Auton Cone Scored Low","Teleop Cube Scored High","Teleop Cube Scored Mid","Teleop Cube Scored Low", "Teleop Cone Scored High","Teleop Cone Scored Mid","Teleop Cone Scored Low""""
@@ -50,6 +50,9 @@ class DataRecord(
   val autonStartingPositionQuestion: MultipleChoice,
   val teleopTaxiTypeQuestion: MultipleChoice,
 
+  val autoTaxiProperty: IntegerProperty,
+  val teleopTaxiProperty: IntegerProperty,
+
   val autonCubeScoredHigh: IntegerProperty,
   val autonCubeScoredMid: IntegerProperty,
   val autonCubeScoredLow: IntegerProperty,
@@ -82,6 +85,9 @@ class DataRecord(
 		autonTaxiTypeQuestion.reset()
 		autonStartingPositionQuestion.reset()
 		teleopTaxiTypeQuestion.reset()
+
+		autoTaxiProperty.value = 0
+		teleopTaxiProperty.value = 0
 
 		autonCubeScoredHigh.value = 0
 		autonCubeScoredMid.value = 0
@@ -138,7 +144,7 @@ class DataRecord(
 				mobilityButton.selected.value.toInt,
 				autonTaxiTypeQuestion.selectedID.getOrElse(-1),
 				autonStartingPositionQuestion.selectedID.getOrElse(-1),
-				teleopTaxiTypeQuestion.selectedID.getOrElse(-1),
+				teleopTaxiProperty.get,
 
 				autonCubeScoredHigh.get,
 				autonCubeScoredMid.get,

@@ -2,11 +2,14 @@ package com.gemsrobotics.scouting2022
 
 import com.gemsrobotics.scouting2022.Utils.makeHeaderText
 import scalafx.application.JFXApp
+import scalafx.beans.binding.Bindings
+import scalafx.beans.property.IntegerProperty
 import scalafx.geometry.{HPos, Insets, Pos, VPos}
 import scalafx.scene.Scene
 import scalafx.scene.control.Alert.AlertType
 import scalafx.scene.control._
 import scalafx.scene.layout.{Background, BackgroundFill, GridPane, HBox, VBox}
+import scalafx.scene.text.TextAlignment
 
 object DataScoutingApp extends JFXApp {
 	def userConfirm(question: String): Boolean = {
@@ -59,6 +62,75 @@ object DataScoutingApp extends JFXApp {
 	val teleopScoringBox: ScoringBox = new ScoringBox
 	val autonScoringBox: ScoringBox = new ScoringBox
 
+
+	val teleopTaxiLevels = Vector("None", "Parked", "Docked", "Engaged")
+
+	val teleopTaxiProperty = new IntegerProperty
+
+	val teleopTaxiSlider = new Slider {
+		value <==> teleopTaxiProperty
+		snapToTicks = true
+		snapToTicks = true
+		showTickMarks = true
+		showTickLabels = false // maybe should be true?
+		blockIncrement = 1.0
+		majorTickUnit = 1.0
+		minorTickCount = 0
+		max = 3.0
+		min = 0.0
+	}
+
+	val teleopTaxiLabel = new Label("None") {
+		alignment = Pos.BaselineCenter
+		textAlignment = TextAlignment.Center
+		GridPane.setHalignment(this, HPos.Center)
+	}
+
+	teleopTaxiProperty.addListener { (o, oldValue, newValue) =>
+		teleopTaxiLabel.text = teleopTaxiLevels(newValue.intValue).toString
+	}
+
+	val teleopTaxiBox = new VBox {
+		spacing = 5
+		padding = Insets(25, 0, 0, 0)
+		alignment = Pos.BaselineCenter
+		children = Seq(teleopTaxiSlider, teleopTaxiLabel)
+	}
+
+	val autoTaxiLevels = Vector("None", "Docked", "Engaged")
+
+	val autoTaxiProperty = new IntegerProperty
+
+	val autoTaxiSlider = new Slider {
+		value <==> teleopTaxiProperty
+		snapToTicks = true
+		snapToTicks = true
+		showTickMarks = true
+		showTickLabels = false // maybe should be true?
+		blockIncrement = 1.0
+		majorTickUnit = 1.0
+		minorTickCount = 0
+		max = 2.0
+		min = 0.0
+	}
+
+	val autoTaxiLabel = new Label("None") {
+		alignment = Pos.BaselineCenter
+		textAlignment = TextAlignment.Center
+		GridPane.setHalignment(this, HPos.Center)
+	}
+
+	autoTaxiProperty.addListener { (o, oldValue, newValue) =>
+		autoTaxiLabel.text = autoTaxiLevels(newValue.intValue).toString
+	}
+
+	val autoTaxiBox = new VBox {
+		spacing = 5
+		padding = Insets(25, 0, 0, 0)
+		alignment = Pos.BaselineCenter
+		children = Seq(autonMobilityButton, autoTaxiSlider, autoTaxiLabel)
+	}
+
 	val record = new DataRecord(
 		matchNumberTextField.text,
 		teamNumberTextField.text,
@@ -68,6 +140,9 @@ object DataScoutingApp extends JFXApp {
 		autonTaxiQuestion,
 		autonStartingPositionQuestion,
 		teleopTaxiQuestion,
+
+		autoTaxiProperty,
+		teleopTaxiProperty,
 
 		autonScoringBox.incrementables(0).count,
 		autonScoringBox.incrementables(1).count,
@@ -178,7 +253,8 @@ object DataScoutingApp extends JFXApp {
 				add(autonScoringBox, 0, 3)
 				add(teleopScoringBox, 1, 3)
 				add(makeTaxiQuestionBox(autonMobilityButton :: autonTaxiQuestion.buttons.toList), 0, 4)
-				add(makeTaxiQuestionBox(teleopTaxiQuestion.buttons.toList), 1, 4)
+//				add(makeTaxiQuestionBox(teleopTaxiQuestion.buttons.toList), 1, 4)
+				add(teleopTaxiBox, 1, 4)
 			}
 		}
 	}
